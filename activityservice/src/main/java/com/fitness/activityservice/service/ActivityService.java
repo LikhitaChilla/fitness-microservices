@@ -6,6 +6,10 @@ import com.fitness.activityservice.dto.ActivityRequest;
 import com.fitness.activityservice.dto.ActivityResponse;
 import com.fitness.activityservice.model.Activity;
 import com.fitness.activityservice.repository.ActivityRepository;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.modelmapper.ModelMapper;
 import lombok.RequiredArgsConstructor;
 
@@ -25,6 +29,17 @@ public class ActivityService {
 				.build();
 		Activity savedact=actrep.save(activity);
 		ActivityResponse res=map.map(savedact,ActivityResponse.class);
+		return res;
+	}
+	public List<ActivityResponse> getUserActivities(String userId) {
+		List<Activity>res=actrep.findByUserId(userId);
+		List<ActivityResponse> ans=res.stream().map(act->map.map(act,ActivityResponse.class)).collect(Collectors.toList());
+		return ans;
+	}
+	public ActivityResponse getActivity(String actId) {
+		Activity s=actrep.findById(actId)
+				.orElseThrow(()-> new RuntimeException("Activity Not Found"));
+		ActivityResponse res=map.map(s,ActivityResponse.class);
 		return res;
 	}
 	
