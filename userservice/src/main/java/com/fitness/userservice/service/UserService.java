@@ -7,7 +7,10 @@ import com.fitness.userservice.dto.UserResponse;
 import com.fitness.userservice.model.User;
 import com.fitness.userservice.repository.UserRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class UserService {
 
 	@Autowired
@@ -34,6 +37,10 @@ public class UserService {
 				.orElseThrow(()-> new RuntimeException("User Not Found"));
 		UserResponse res=map.map(user,UserResponse.class);
 		return res;
+	}
+	public Boolean existByUserId(String userId) {
+		log.info("Calling user validation API for userId: {}",userId);
+		return repo.existsById(userId);
 	}
 
 }
